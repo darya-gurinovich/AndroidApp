@@ -61,6 +61,7 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
+        //Add the IMEI if the permission was granted
         val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
         var imei = telephonyManager.deviceId
         if (imei == null) imei = "No information"
