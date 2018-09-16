@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">AndroidApp</string>
+    <string name="app_version">The current app version: </string>
+    <string name="phone_imei">The phone IMEI: </string>
 </resources>
