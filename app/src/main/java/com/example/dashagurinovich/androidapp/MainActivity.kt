@@ -11,6 +11,8 @@ import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
 
+    private val _requestPermissionPhoneState = 1
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -20,19 +22,48 @@ class MainActivity : AppCompatActivity() {
         addCurrentAppVersionToLayout()
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) {
+            _requestPermissionPhoneState -> {
+                var imei : String
+                //Show the IMEI if the permission was granted
+                if ((grantResults.isNotEmpty() &&
+                                grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+
+                    val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE)
+                            as TelephonyManager
+                    imei = telephonyManager.deviceId
+                    if (imei == null) imei = "No information"
+                } else {
+                    imei = "No information"
+                }
+
+                val phoneImeiTextView = findViewById<TextView>(R.id.phoneImeiTextView)
+                phoneImeiTextView.text = imei
+                return
+            }
+
+            else -> {
+                return
+            }
+        }
+    }
+
     private fun addPhoneImeiToLayout(){
-        val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-        val permission = ActivityCompat.checkSelfPermission(this,
+        var permission = ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.READ_PHONE_STATE)
 
-        var imei: String
-        if (permission == PackageManager.PERMISSION_GRANTED) {
-            imei = telephonyManager.deviceId
-            if (imei == null) imei = "No information"
+        //If the permission was denied show the dialog window to ask the permission
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    arrayOf(Manifest.permission.READ_PHONE_STATE), _requestPermissionPhoneState)
+            return
         }
-        else {
-            imei = "No information"
-        }
+
+        val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        var imei = telephonyManager.deviceId
+        if (imei == null) imei = "No information"
 
         val phoneImeiTextView = findViewById<TextView>(R.id.phoneImeiTextView)
         phoneImeiTextView.text = imei
