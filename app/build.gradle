@@ -4,14 +4,16 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply from: "$project.rootDir/gradle/git-version.gradle"
+
 android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.dashagurinovich.androidapp"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 2
-        versionName "0.1.1"
+        versionCode gitVersionCode
+        versionName gitVersionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
