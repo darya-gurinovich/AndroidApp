@@ -42,7 +42,7 @@ ext {
     else
         gitVersionName = "0.0." + numberOfComittsSinceLastTag
 
-    gitVersionCode = git.tag.list().size()
+    gitVersionCode = git.log().size()
 }
 
 task printVersion() << {
