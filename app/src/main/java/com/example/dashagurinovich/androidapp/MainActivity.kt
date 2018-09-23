@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.telephony.TelephonyManager
 import android.widget.TextView
@@ -26,19 +27,19 @@ class MainActivity : AppCompatActivity() {
                                             permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             _requestPermissionPhoneState -> {
-                var imei : String
+                var imei = "No information"
                 //Show the IMEI if the permission was granted
                 if ((grantResults.isNotEmpty() &&
                                 grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-
-                    val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE)
-                            as TelephonyManager
-                    imei = telephonyManager.deviceId
-                    if (imei == null) imei = "No information"
-                } else {
-                    imei = "No information"
+                    imei = getImei()
                 }
-
+                //Show the explanation for the permission if it was denied
+                else if ((grantResults.isNotEmpty() &&
+                                grantResults[0] == PackageManager.PERMISSION_DENIED)) {
+                    showPermissionExplanation(Manifest.permission.READ_PHONE_STATE,
+                            getString(R.string.read_phone_state_permission_explanation),
+                            _requestPermissionPhoneState)
+                }
                 val phoneImeiTextView = findViewById<TextView>(R.id.phoneImeiTextView)
                 phoneImeiTextView.text = imei
                 return
@@ -47,6 +48,27 @@ class MainActivity : AppCompatActivity() {
             else -> {
                 return
             }
+        }
+    }
+
+    private fun showPermissionExplanation (permission : String, explanation : String,
+                                           permissionRequestCode: Int) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
+            val builder = AlertDialog.Builder(this)
+            var dialogQuestion = getString(R.string.permission_explanation_dialog_question)
+            builder.setMessage("$explanation $dialogQuestion")
+                    .setTitle(R.string.permission_explanation_dialog_title)
+
+            builder.setPositiveButton("Yes"){ _, _ ->
+                // Do nothing if the user doesn't want to give the permission
+                }
+                    .setNegativeButton("No") { _, _ ->
+                        ActivityCompat.requestPermissions(this,
+                                arrayOf(permission), permissionRequestCode)
+
+                }
+
+            builder.show()
         }
     }
 
@@ -62,12 +84,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         //Add the IMEI if the permission was granted
-        val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-        var imei = telephonyManager.deviceId
-        if (imei == null) imei = "No information"
+        var imei = getImei()
 
         val phoneImeiTextView = findViewById<TextView>(R.id.phoneImeiTextView)
         phoneImeiTextView.text = imei
+    }
+
+    private fun getImei() : String{
+        val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        var imei = telephonyManager.deviceId
+        if (imei == null) imei = "No information"
+        return imei
     }
 
     private fun addCurrentAppVersionToLayout(){
