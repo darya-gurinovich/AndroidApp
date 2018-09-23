@@ -31,16 +31,29 @@ ext {
         }
     }
 
+    def getLastTagName = { _ ->
+        try {
+            // Return the last tag name
+            def code = new ByteArrayOutputStream()
+            exec {
+                commandLine 'git', 'describe', '--abbrev=0'
+                standardOutput = code
+            }
+            return code.toString().replace("\n", "")
+        }
+        catch (ignored) {
+            // If there's no tags return 0.0
+            return "0.0"
+        }
+    }
+
     git = Grgit.open(currentDir: projectDir)
 
     //The version sample is "X.Y" where X is the last tag, Y is the number of the commits
     //after the last tag
-    lastTag = git.describe()
-    numberOfComittsSinceLastTag = getNumberOfCommitsSinceLastTag(lastTag).toString()
-    if (lastTag?.trim())
-        gitVersionName = git.describe() + '.' + numberOfComittsSinceLastTag
-    else
-        gitVersionName = "0.0." + numberOfComittsSinceLastTag
+    lastTagName = getLastTagName()
+    numberOfComittsSinceLastTag = getNumberOfCommitsSinceLastTag(lastTagName).toString()
+    gitVersionName = lastTagName + '.' + numberOfComittsSinceLastTag
 
     gitVersionCode = git.log().size()
 }
