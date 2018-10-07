@@ -4,20 +4,41 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply from: "$project.rootDir/gradle/git-version.gradle"
+
 android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.dashagurinovich.androidapp"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 1
-        versionName "0.1.0"
+        versionCode gitVersionCode
+        versionName gitVersionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    signingConfigs {
+        release {
+            storeFile file(RELEASE_STORE_FILE)
+            storePassword RELEASE_STORE_PASSWORD
+            keyAlias RELEASE_KEY_ALIAS
+            keyPassword RELEASE_KEY_PASSWORD
+        }
     }
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationVariants.all { variant ->
+                variant.outputs.all {
+                    def applicationName = "AndroidApp"
+                    def versionNameSuffix = (variant.productFlavors[0].versionNameSuffix == null) ?
+                    "" : variant.productFlavors[0].versionNameSuffix
+                    def apkName = "${applicationName}_${defaultConfig.versionName}" +
+                            "${versionNameSuffix}.apk"
+                    outputFileName = apkName
+                }
+            }
         }
     }
     flavorDimensions "version"
@@ -30,7 +51,6 @@ android {
         full {
             dimension "version"
             applicationIdSuffix ".full"
-            versionNameSuffix "-full"
         }
     }
 }
