@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.telephony.TelephonyManager
 import android.widget.TextView
 
-class MainActivity : AppCompatActivity() {
+class AboutActivity : AppCompatActivity() {
 
     private val _requestPermissionPhoneState = 1
 
