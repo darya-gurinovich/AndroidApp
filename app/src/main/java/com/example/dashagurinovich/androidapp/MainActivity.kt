@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
                                             permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             _requestPermissionPhoneState -> {
-                var imei = "No information"
+                var imei = getString(R.string.no_information)
                 //Show the IMEI if the permission was granted
                 if ((grantResults.isNotEmpty() &&
                                 grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
@@ -42,10 +42,6 @@ class MainActivity : AppCompatActivity() {
                 }
                 val phoneImeiTextView = findViewById<TextView>(R.id.phoneImeiTextView)
                 phoneImeiTextView.text = imei
-                return
-            }
-
-            else -> {
                 return
             }
         }
@@ -94,7 +90,7 @@ class MainActivity : AppCompatActivity() {
     private fun getImei() : String{
         val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
         var imei = telephonyManager.deviceId
-        if (imei == null) imei = "No information"
+        if (imei == null) imei = getString(R.string.no_information)
         return imei
     }
 

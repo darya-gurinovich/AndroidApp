@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">AndroidApp</string>
     <string name="app_version">The current app version: </string>
+    <string name="no_information">No information</string>
     <string name="read_phone_state_permission_explanation">The permission is needed to get your
         phone imei.</string>
     <string name="permission_explanation_dialog_question">Are you sure you don\'t want to
