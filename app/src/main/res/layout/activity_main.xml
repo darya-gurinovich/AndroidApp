@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/drawer_layout"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -15,7 +16,9 @@
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/toolbar"/>
+            android:id="@+id/toolbar"
+            android:background="?colorPrimary"
+            android:theme="@style/ToolbarTheme"/>
 
         <fragment
             android:id="@+id/main_activity_fragment"

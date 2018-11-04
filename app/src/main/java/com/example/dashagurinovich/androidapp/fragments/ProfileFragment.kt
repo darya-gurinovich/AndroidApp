@@ -1,4 +1,4 @@
-package com.example.dashagurinovich.androidapp.dev
+package com.example.dashagurinovich.androidapp.fragments
 
 
 import android.os.Bundle
