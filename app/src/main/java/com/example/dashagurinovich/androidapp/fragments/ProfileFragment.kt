@@ -42,7 +42,7 @@ class ProfileFragment : Fragment() {
             val builder = AlertDialog.Builder(mainActivity)
 
             builder.setPositiveButton(getString(R.string.take_photo)){ _, _ ->
-                // Do nothing if the user doesn't want to give the permission
+                uploadFromCamera(mainActivity)
             }
                     .setNeutralButton(getString(R.string.upload_from_gallery)) { _, _ ->
                         uploadFromGallery(mainActivity)
@@ -68,5 +68,20 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    private fun uploadFromCamera(mainActivity: MainActivity) {
+        val permission = ActivityCompat.checkSelfPermission(mainActivity,
+                Manifest.permission.CAMERA)
+
+        //If the permission was denied show the dialog window to ask the permission
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(mainActivity,
+                    arrayOf(Manifest.permission.CAMERA),
+                    MainActivity.REQUEST_PERMISSION_CAMERA)
+            return
+        }
+        else {
+            mainActivity.getImageFromCamera()
+        }
+    }
 
 }

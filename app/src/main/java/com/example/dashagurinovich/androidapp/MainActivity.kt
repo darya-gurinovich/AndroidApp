@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
 import androidx.core.app.ActivityCompat
@@ -27,6 +28,8 @@ class MainActivity : AppCompatActivity() {
         const val REQUEST_PERMISSION_PHONE_STATE = 1
         const val REQUEST_PERMISSION_EXTERNAL_STORAGE = 2
         const val REQUEST_OPEN_GALLERY = 3
+        const val REQUEST_PERMISSION_CAMERA = 4
+        const val REQUEST_OPEN_CAMERA = 5
     }
 
     private var imei = ""
@@ -116,6 +119,20 @@ class MainActivity : AppCompatActivity() {
                             MainActivity.REQUEST_PERMISSION_EXTERNAL_STORAGE)
                 }
             }
+            MainActivity.REQUEST_PERMISSION_CAMERA -> {
+                //Open the gallery
+                if ((grantResults.isNotEmpty() &&
+                                grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    getImageFromCamera()
+                }
+                //Show the explanation for the permission if it was denied
+                else if ((grantResults.isNotEmpty() &&
+                                grantResults[0] == PackageManager.PERMISSION_DENIED)) {
+                    showPermissionExplanation(Manifest.permission.CAMERA,
+                            getString(R.string.camera_permission_explanation),
+                            MainActivity.REQUEST_PERMISSION_CAMERA)
+                }
+            }
         }
     }
 
@@ -155,6 +172,11 @@ class MainActivity : AppCompatActivity() {
         startActivityForResult(gallery, MainActivity.REQUEST_OPEN_GALLERY)
     }
 
+    fun getImageFromCamera() {
+        val camera = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(camera, MainActivity.REQUEST_OPEN_CAMERA)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -164,7 +186,12 @@ class MainActivity : AppCompatActivity() {
                 val selectedImage = data.data
                 profilePhoto.setImageURI(selectedImage)
             }
+            MainActivity.REQUEST_OPEN_CAMERA -> {
+                val photo = data.extras?.get("data") ?: return
+                profilePhoto.setImageBitmap(photo as Bitmap)
+            }
         }
     }
+
 
 }

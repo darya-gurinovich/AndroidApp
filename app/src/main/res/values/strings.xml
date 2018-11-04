@@ -23,6 +23,8 @@
     <string name="upload_from_gallery">Upload from Gallery</string>
     <string name="read_external_storage_permission_explanation">The permission is needed to
         upload photo from the gallery.</string>
+    <string name="camera_permission_explanation">The permission is needed to
+        take a photo to upload.</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
