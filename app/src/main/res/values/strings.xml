@@ -8,4 +8,9 @@
         give the permission?</string>
     <string name="permission_explanation_dialog_title">The permission explanation</string>
     <string name="phone_imei">The phone IMEI: </string>
+
+    <string name="profile">Profile</string>
+    <string name="about">About</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

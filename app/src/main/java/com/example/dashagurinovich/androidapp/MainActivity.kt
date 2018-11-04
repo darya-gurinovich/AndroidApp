@@ -19,8 +19,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        addPhoneImeiToLayout()
-        addCurrentAppVersionToLayout()
+       // addPhoneImeiToLayout()
+       // addCurrentAppVersionToLayout()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int,
