@@ -1,9 +1,12 @@
 package com.example.dashagurinovich.androidapp
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.core.app.ActivityCompat
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -16,11 +19,14 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.navigateUp
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_about.phoneImeiTextView
+import kotlinx.android.synthetic.main.fragment_profile.profilePhoto
 
 class MainActivity : AppCompatActivity() {
 
     companion object {
         const val REQUEST_PERMISSION_PHONE_STATE = 1
+        const val REQUEST_PERMISSION_EXTERNAL_STORAGE = 2
+        const val REQUEST_OPEN_GALLERY = 3
     }
 
     private var imei = ""
@@ -96,6 +102,20 @@ class MainActivity : AppCompatActivity() {
                 phoneImeiTextView.text = this.imei
                 return
             }
+            MainActivity.REQUEST_PERMISSION_EXTERNAL_STORAGE -> {
+                //Open the gallery
+                if ((grantResults.isNotEmpty() &&
+                                grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    getImageFromGallery()
+                }
+                //Show the explanation for the permission if it was denied
+                else if ((grantResults.isNotEmpty() &&
+                                grantResults[0] == PackageManager.PERMISSION_DENIED)) {
+                    showPermissionExplanation(Manifest.permission.READ_EXTERNAL_STORAGE,
+                            getString(R.string.read_external_storage_permission_explanation),
+                            MainActivity.REQUEST_PERMISSION_EXTERNAL_STORAGE)
+                }
+            }
         }
     }
 
@@ -129,4 +149,22 @@ class MainActivity : AppCompatActivity() {
         if (imei == null) this.imei = getString(R.string.no_info)
         this.imei = imei
     }
+
+    fun getImageFromGallery() {
+        val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(gallery, MainActivity.REQUEST_OPEN_GALLERY)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode != Activity.RESULT_OK || data == null) return
+        when (requestCode) {
+            MainActivity.REQUEST_OPEN_GALLERY -> {
+                val selectedImage = data.data
+                profilePhoto.setImageURI(selectedImage)
+            }
+        }
+    }
+
 }
