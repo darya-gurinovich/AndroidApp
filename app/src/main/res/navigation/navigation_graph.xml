@@ -6,17 +6,17 @@
     <fragment
         android:id="@+id/destination_profile"
         android:name="com.example.dashagurinovich.androidapp.fragments.ProfileFragment"
-        android:label="ProfileFragment" />
+        android:label="Profile" />
     <fragment
         android:id="@+id/destination_about"
         android:name="com.example.dashagurinovich.androidapp.fragments.AboutFragment"
-        android:label="AboutFragment" />
+        android:label="About" />
     <fragment
         android:id="@+id/destination_bookmarks"
         android:name="com.example.dashagurinovich.androidapp.fragments.BookmarksFragment"
-        android:label="BookmarksFragment" />
+        android:label="Bookmarks" />
     <fragment
         android:id="@+id/destination_help"
         android:name="com.example.dashagurinovich.androidapp.fragments.HelpFragment"
-        android:label="HelpFragment" />
+        android:label="Help" />
 </navigation>
