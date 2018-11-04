@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/navigation_graph"
-    app:startDestination="@id/profileFragment">
+    app:startDestination="@id/destination_profile">
 
     <fragment
-        android:id="@+id/profileFragment"
-        android:name="com.example.dashagurinovich.androidapp.dev.ProfileFragment"
+        android:id="@+id/destination_profile"
+        android:name="com.example.dashagurinovich.androidapp.fragments.ProfileFragment"
         android:label="ProfileFragment" />
+    <fragment
+        android:id="@+id/destination_about"
+        android:name="com.example.dashagurinovich.androidapp.fragments.AboutFragment"
+        android:label="AboutFragment" />
+    <fragment
+        android:id="@+id/destination_bookmarks"
+        android:name="com.example.dashagurinovich.androidapp.fragments.BookmarksFragment"
+        android:label="BookmarksFragment" />
+    <fragment
+        android:id="@+id/destination_help"
+        android:name="com.example.dashagurinovich.androidapp.fragments.HelpFragment"
+        android:label="HelpFragment" />
 </navigation>

@@ -3,9 +3,13 @@
     <item
         android:id="@+id/destination_profile"
         android:title="@string/profile"
-        />
+        android:icon="@drawable/profile"/>
     <item
-        android:id="@+id/destination_about"
-        android:title="@string/about"
-        />
+        android:id="@+id/destination_bookmarks"
+        android:title="@string/bookmark"
+        android:icon="@drawable/bookmark_border"/>
+    <item
+        android:id="@+id/destination_help"
+        android:title="@string/help"
+        android:icon="@drawable/help"/>
 </menu>

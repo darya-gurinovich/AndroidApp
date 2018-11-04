@@ -8,95 +8,52 @@ import androidx.core.app.ActivityCompat
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.telephony.TelephonyManager
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.TextView
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.navigateUp
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-
-    private val _requestPermissionPhoneState = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-       // addPhoneImeiToLayout()
-       // addCurrentAppVersionToLayout()
+        setSupportActionBar(toolbar)
+
+        val navController = Navigation.findNavController(this, R.id.main_activity_fragment)
+        setupSideNavMenu(navController)
+        setupActionBar(navController)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            _requestPermissionPhoneState -> {
-                var imei = getString(R.string.no_information)
-                //Show the IMEI if the permission was granted
-                if ((grantResults.isNotEmpty() &&
-                                grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                    imei = getImei()
-                }
-                //Show the explanation for the permission if it was denied
-                else if ((grantResults.isNotEmpty() &&
-                                grantResults[0] == PackageManager.PERMISSION_DENIED)) {
-                    showPermissionExplanation(Manifest.permission.READ_PHONE_STATE,
-                            getString(R.string.read_phone_state_permission_explanation),
-                            _requestPermissionPhoneState)
-                }
-                val phoneImeiTextView = findViewById<TextView>(R.id.phoneImeiTextView)
-                phoneImeiTextView.text = imei
-                return
-            }
+    private fun setupSideNavMenu(navController: NavController) {
+        navigation_view?.let {
+            NavigationUI.setupWithNavController(it, navController)
         }
     }
 
-    private fun showPermissionExplanation (permission : String, explanation : String,
-                                           permissionRequestCode: Int) {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
-            val builder = AlertDialog.Builder(this)
-            var dialogQuestion = getString(R.string.permission_explanation_dialog_question)
-            builder.setMessage("$explanation $dialogQuestion")
-                    .setTitle(R.string.permission_explanation_dialog_title)
-
-            builder.setPositiveButton("Yes"){ _, _ ->
-                    // Do nothing if the user doesn't want to give the permission
-                }
-                    // Show the permission dialog again
-                    .setNegativeButton("No") { _, _ ->
-                        ActivityCompat.requestPermissions(this,
-                                arrayOf(permission), permissionRequestCode)
-
-                }
-
-            builder.show()
-        }
+    private fun setupActionBar(navController: NavController) {
+        NavigationUI.setupActionBarWithNavController(this, navController, drawer_layout)
     }
 
-    private fun addPhoneImeiToLayout(){
-        var permission = ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.READ_PHONE_STATE)
-
-        //If the permission was denied show the dialog window to ask the permission
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    arrayOf(Manifest.permission.READ_PHONE_STATE), _requestPermissionPhoneState)
-            return
-        }
-
-        //Add the IMEI if the permission was granted
-        var imei = getImei()
-
-        val phoneImeiTextView = findViewById<TextView>(R.id.phoneImeiTextView)
-        phoneImeiTextView.text = imei
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_toolbar, menu)
+        return true
     }
 
-    private fun getImei() : String{
-        val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-        var imei = telephonyManager.deviceId
-        if (imei == null) imei = getString(R.string.no_information)
-        return imei
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        val navController = Navigation.findNavController(this, R.id.main_activity_fragment)
+        val navigated = NavigationUI.onNavDestinationSelected(item!!, navController)
+        return navigated || super.onOptionsItemSelected(item)
     }
 
-    private fun addCurrentAppVersionToLayout(){
-        val appVersion = BuildConfig.VERSION_NAME
-        val versionTextView = findViewById<TextView>(R.id.versionTextView)
-        versionTextView.text = appVersion
+    override fun onSupportNavigateUp(): Boolean {
+        return Navigation.findNavController(this, R.id.main_activity_fragment).navigateUp(drawer_layout)
     }
+
 }
