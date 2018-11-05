@@ -1,30 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="fragments.ProfileFragment"
-    android:orientation="horizontal"
     android:gravity="center">
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center">
-
-        <ImageView
-            android:id="@+id/profilePhoto"
-            android:layout_width="160dp"
-            android:layout_height="160dp"
-            android:src="@drawable/user_profile" />
-
-        <Button
-            android:id="@+id/changeProfileButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/change_profile"/>
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -43,10 +22,11 @@
                 android:text="@string/surname_title"
                 android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/surnameTextView"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/surnameEditText"
+                android:layout_width="210dp"
                 android:layout_height="wrap_content"
+                android:inputType="text"
                 android:text="@string/no_info"
                 android:textSize="18sp" />
 
@@ -64,10 +44,11 @@
                 android:text="@string/name_title"
                 android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/nameTextView"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/nameEditText"
+                android:layout_width="210dp"
                 android:layout_height="wrap_content"
+                android:inputType="text"
                 android:text="@string/no_info"
                 android:textSize="18sp" />
         </LinearLayout>
@@ -84,10 +65,11 @@
                 android:text="@string/phone_title"
                 android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/phoneTextView"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/phoneEditText"
+                android:layout_width="210dp"
                 android:layout_height="wrap_content"
+                android:inputType="phone"
                 android:text="@string/no_info"
                 android:textSize="18sp" />
 
@@ -105,14 +87,21 @@
                 android:text="@string/email_title"
                 android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/emailTextView"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/emailEditText"
+                android:layout_width="210dp"
                 android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
                 android:text="@string/no_info"
                 android:textSize="18sp" />
         </LinearLayout>
-
     </LinearLayout>
+
+    <Button
+        android:id="@+id/saveProfileButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/save_profile"/>
 
 </LinearLayout>

@@ -6,7 +6,11 @@
     <fragment
         android:id="@+id/destination_profile"
         android:name="com.example.dashagurinovich.androidapp.fragments.ProfileFragment"
-        android:label="Profile" />
+        android:label="Profile" >
+        <action
+            android:id="@+id/action_change_profile"
+            app:destination="@id/destination_change_profile" />
+    </fragment>
     <fragment
         android:id="@+id/destination_about"
         android:name="com.example.dashagurinovich.androidapp.fragments.AboutFragment"
@@ -19,4 +23,28 @@
         android:id="@+id/destination_help"
         android:name="com.example.dashagurinovich.androidapp.fragments.HelpFragment"
         android:label="Help" />
+    <fragment
+        android:id="@+id/destination_change_profile"
+        android:name="com.example.dashagurinovich.androidapp.fragments.ChangeProfileFragment"
+        android:label="Change Profile">
+        <action
+            android:id="@+id/action_save_profile"
+            app:destination="@id/destination_profile" />
+        <argument
+            android:name="surname"
+            android:defaultValue="@string/no_info"
+            app:argType="string" />
+        <argument
+            android:name="name"
+            android:defaultValue="@string/no_info"
+            app:argType="string" />
+        <argument
+            android:name="email"
+            android:defaultValue="@string/no_info"
+            app:argType="string" />
+        <argument
+            android:name="phone"
+            android:defaultValue="@string/no_info"
+            app:argType="string" />
+    </fragment>
 </navigation>

@@ -204,6 +204,8 @@ class MainActivity : AppCompatActivity() {
         return storage.getProfile() ?: Profile()
     }
 
-
+    fun saveProfileInfo(profile: Profile) {
+        storage.saveProfile(profile)
+    }
 
 }

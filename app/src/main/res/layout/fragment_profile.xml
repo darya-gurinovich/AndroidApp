@@ -13,6 +13,15 @@
         android:src="@drawable/user_profile" />
 
     <TableRow
+        android:gravity="center_horizontal">
+        <Button
+            android:id="@+id/changeProfileButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/change_profile"/>
+    </TableRow>
+
+    <TableRow
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">

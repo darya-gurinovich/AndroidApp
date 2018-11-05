@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import androidx.navigation.Navigation
 import com.example.dashagurinovich.androidapp.MainActivity
 import com.example.dashagurinovich.androidapp.R
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -51,6 +52,17 @@ class ProfileFragment : Fragment() {
                     }
 
             builder.show()
+        }
+
+        changeProfileButton.setOnClickListener{
+            val changeProfileAction = ProfileFragmentDirections.ActionChangeProfile()
+
+            changeProfileAction.setSurname(surnameTextView.text as String)
+            changeProfileAction.setName(nameTextView.text as String)
+            changeProfileAction.setEmail(emailTextView.text as String)
+            changeProfileAction.setPhone(phoneTextView.text as String)
+
+            Navigation.findNavController(it).navigate(changeProfileAction)
         }
 
     }
