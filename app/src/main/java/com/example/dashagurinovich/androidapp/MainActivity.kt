@@ -18,9 +18,13 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.navigateUp
+import com.example.dashagurinovich.androidapp.storage.IStorage
+import com.example.dashagurinovich.androidapp.model.Profile
+import com.example.dashagurinovich.androidapp.storage.XMLStorage
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_about.phoneImeiTextView
 import kotlinx.android.synthetic.main.fragment_profile.profilePhoto
+import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,6 +37,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private var imei = ""
+    private lateinit var storage : IStorage
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -45,6 +50,8 @@ class MainActivity : AppCompatActivity() {
         val navController = Navigation.findNavController(this, R.id.main_activity_fragment)
         setupSideNavMenu(navController)
         setupActionBar(navController)
+
+        storage = XMLStorage(File(applicationContext.filesDir, "data.xml"))
     }
 
     private fun setupSideNavMenu(navController: NavController) {
@@ -192,6 +199,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    fun getProfileInfo() : Profile {
+        return storage.getProfile() ?: Profile()
+    }
+
 
 
 }

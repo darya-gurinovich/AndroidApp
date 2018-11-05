@@ -38,6 +38,8 @@ class ProfileFragment : Fragment() {
         if (activity !is MainActivity) return
         val mainActivity = activity as MainActivity
 
+        updateProfileInfo(mainActivity)
+
         profilePhoto.setOnClickListener {
             val builder = AlertDialog.Builder(mainActivity)
 
@@ -50,6 +52,17 @@ class ProfileFragment : Fragment() {
 
             builder.show()
         }
+
+    }
+
+    private fun updateProfileInfo(mainActivity: MainActivity) {
+
+        val profile = mainActivity.getProfileInfo()
+
+        surnameTextView?.text = profile.surname
+        nameTextView?.text = profile.name
+        phoneTextView?.text = profile.phone
+        emailTextView?.text = profile.email
     }
 
     private fun uploadFromGallery(mainActivity: MainActivity) {
