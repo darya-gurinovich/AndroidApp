@@ -19,6 +19,8 @@
     <string name="phone_title">Phone:</string>
     <string name="email_title">Email:</string>
 
+    <string name="person_full_name">%1$s %2$s</string>
+
     <string name="take_photo">Take photo</string>
     <string name="upload_from_gallery">Upload from Gallery</string>
     <string name="read_external_storage_permission_explanation">The permission is needed to

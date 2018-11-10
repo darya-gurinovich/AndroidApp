@@ -16,15 +16,26 @@ import androidx.core.content.ContextCompat.getSystemService
 import com.example.dashagurinovich.androidapp.BuildConfig
 import com.example.dashagurinovich.androidapp.MainActivity
 import com.example.dashagurinovich.androidapp.R
+import com.example.dashagurinovich.androidapp.interfaces.IImeiManager
 import kotlinx.android.synthetic.main.fragment_about.*
 
 class AboutFragment : Fragment() {
+
+    private var imeiManager : IImeiManager? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
 
         return inflater.inflate(R.layout.fragment_about, container, false)
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+
+        if (context is IImeiManager)
+            imeiManager = context
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -36,28 +47,12 @@ class AboutFragment : Fragment() {
 
 
     private fun addPhoneImeiToLayout(){
-        if (activity !is MainActivity) return
 
-        val mainActivity = activity as MainActivity
+        val imei = imeiManager?.getImei() ?: getString(R.string.no_info)
+        //Add the IMEI if the permission was granted
 
-        val permission = ActivityCompat.checkSelfPermission(mainActivity,
-                Manifest.permission.READ_PHONE_STATE)
+        phoneImeiTextView.text = imei
 
-        //If the permission was denied show the dialog window to ask the permission
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(mainActivity,
-                    arrayOf(Manifest.permission.READ_PHONE_STATE),
-                    MainActivity.REQUEST_PERMISSION_PHONE_STATE)
-            return
-        }
-
-        else {
-
-            val imei = mainActivity.getImei()
-            //Add the IMEI if the permission was granted
-
-            phoneImeiTextView.text = imei
-        }
     }
 
     private fun addCurrentAppVersionToLayout(){

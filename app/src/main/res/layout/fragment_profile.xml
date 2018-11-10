@@ -27,40 +27,6 @@
 
     </RelativeLayout>
 
-    <TableRow
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="24dp"
-            android:text="@string/surname_title"
-            android:textSize="18sp"
-            android:layout_column="0"/>
-
-
-        <TextView
-            android:id="@+id/surnameTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/no_info"
-            android:textSize="18sp"
-            android:layout_column="1"/>
-
-        <EditText
-            android:id="@+id/surnameEditView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/no_info"
-            android:textSize="18sp"
-            android:visibility="gone"
-            android:layout_column="1"
-            android:inputType="text"/>
-
-    </TableRow>
-
         <TableRow
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -90,6 +56,40 @@
                 android:visibility="gone"
                 android:layout_column="1"
                 android:inputType="text"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="24dp"
+                android:text="@string/surname_title"
+                android:textSize="18sp"
+                android:layout_column="0"/>
+
+
+            <TextView
+                android:id="@+id/surnameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_info"
+                android:textSize="18sp"
+                android:layout_column="1"/>
+
+            <EditText
+                android:id="@+id/surnameEditView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_info"
+                android:textSize="18sp"
+                android:visibility="gone"
+                android:layout_column="1"
+                android:inputType="text"/>
+
         </TableRow>
 
         <TableRow
