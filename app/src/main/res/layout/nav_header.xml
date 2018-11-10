@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/destination_profile"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/side_nav_bar"
+    android:gravity="center"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/profileNavPhoto"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/user_profile"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_info"
+        android:textColor="#FFF"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+</LinearLayout>

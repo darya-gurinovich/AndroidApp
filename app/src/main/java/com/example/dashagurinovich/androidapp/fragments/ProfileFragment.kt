@@ -48,16 +48,18 @@ class ProfileFragment : Fragment() {
         updateProfileInfo(mainActivity)
 
         profilePhoto.setOnClickListener {
-            val builder = AlertDialog.Builder(mainActivity)
+            if (isChangeMode) {
+                val builder = AlertDialog.Builder(mainActivity)
 
-            builder.setPositiveButton(getString(R.string.take_photo)){ _, _ ->
-                uploadFromCamera(mainActivity)
+                builder.setPositiveButton(getString(R.string.take_photo)) { _, _ ->
+                    uploadFromCamera(mainActivity)
+                }
+                        .setNeutralButton(getString(R.string.upload_from_gallery)) { _, _ ->
+                            uploadFromGallery(mainActivity)
+                        }
+
+                builder.show()
             }
-                    .setNeutralButton(getString(R.string.upload_from_gallery)) { _, _ ->
-                        uploadFromGallery(mainActivity)
-                    }
-
-            builder.show()
         }
 
         changeProfileButton.setOnClickListener {
@@ -81,6 +83,7 @@ class ProfileFragment : Fragment() {
         for (textView in textViews)
             textView.visibility = View.GONE
 
+        profilePhotoEditImage.visibility = View.VISIBLE
         changeProfileButton.setImageResource(R.drawable.ic_done)
     }
 
@@ -91,6 +94,7 @@ class ProfileFragment : Fragment() {
         for (textView in textViews)
             textView.visibility = View.VISIBLE
 
+        profilePhotoEditImage.visibility = View.INVISIBLE
         changeProfileButton.setImageResource(R.drawable.ic_edit)
     }
 

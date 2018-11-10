@@ -8,11 +8,24 @@
     android:gravity="center"
     android:id="@+id/profileView">
 
-    <ImageView
-        android:id="@+id/profilePhoto"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        android:src="@drawable/user_profile" />
+    <RelativeLayout>
+        <ImageView
+            android:id="@+id/profilePhoto"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/user_profile"/>
+
+        <ImageView
+            android:id="@+id/profilePhotoEditImage"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignEnd="@id/profilePhoto"
+            android:layout_alignBottom="@id/profilePhoto"
+            android:visibility="invisible"
+            android:src="@drawable/ic_edit_photo" />
+
+    </RelativeLayout>
 
     <TableRow
         android:layout_width="wrap_content"

@@ -24,6 +24,7 @@ import com.example.dashagurinovich.androidapp.storage.XMLStorage
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_about.phoneImeiTextView
 import kotlinx.android.synthetic.main.fragment_profile.profilePhoto
+import kotlinx.android.synthetic.main.nav_header.*
 import java.io.File
 
 
