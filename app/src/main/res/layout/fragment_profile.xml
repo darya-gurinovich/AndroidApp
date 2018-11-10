@@ -3,23 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="fragments.ProfileFragment"
-    android:gravity="center">
+    android:gravity="center"
+    android:id="@+id/profileView">
 
     <ImageView
         android:id="@+id/profilePhoto"
         android:layout_width="160dp"
         android:layout_height="160dp"
         android:src="@drawable/user_profile" />
-
-    <TableRow
-        android:gravity="center_horizontal">
-        <Button
-            android:id="@+id/changeProfileButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/change_profile"/>
-    </TableRow>
 
     <TableRow
         android:layout_width="wrap_content"
@@ -31,14 +24,27 @@
             android:layout_height="wrap_content"
             android:padding="24dp"
             android:text="@string/surname_title"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:layout_column="0"/>
+
 
         <TextView
             android:id="@+id/surnameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/no_info"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:layout_column="1"/>
+
+        <EditText
+            android:id="@+id/surnameEditView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_info"
+            android:textSize="18sp"
+            android:visibility="gone"
+            android:layout_column="1"
+            android:inputType="text"/>
 
     </TableRow>
 
@@ -59,7 +65,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/no_info"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:layout_column="1"/>
+
+            <EditText
+                android:id="@+id/nameEditView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_info"
+                android:textSize="18sp"
+                android:visibility="gone"
+                android:layout_column="1"
+                android:inputType="text"/>
         </TableRow>
 
         <TableRow
@@ -79,7 +96,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/no_info"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:layout_column="1"/>
+
+            <EditText
+                android:id="@+id/phoneEditView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_info"
+                android:textSize="18sp"
+                android:visibility="gone"
+                android:layout_column="1"
+                android:inputType="phone"/>
 
         </TableRow>
 
@@ -100,7 +128,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/no_info"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:layout_column="1"/>
+
+            <EditText
+                android:id="@+id/emailEditView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_info"
+                android:textSize="18sp"
+                android:visibility="gone"
+                android:layout_column="1"
+                android:inputType="textEmailAddress"/>
         </TableRow>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/changeProfileButton"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="end|bottom"
+        android:backgroundTint="@color/colorPrimary"
+        android:src="@drawable/ic_edit"
+        app:backgroundTint="@color/colorPrimaryDark"
+        android:scaleType="center"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"/>
 
 </TableLayout>

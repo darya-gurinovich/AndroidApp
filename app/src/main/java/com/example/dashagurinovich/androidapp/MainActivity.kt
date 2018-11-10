@@ -26,6 +26,7 @@ import kotlinx.android.synthetic.main.fragment_about.phoneImeiTextView
 import kotlinx.android.synthetic.main.fragment_profile.profilePhoto
 import java.io.File
 
+
 class MainActivity : AppCompatActivity() {
 
     companion object {
@@ -34,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         const val REQUEST_OPEN_GALLERY = 3
         const val REQUEST_PERMISSION_CAMERA = 4
         const val REQUEST_OPEN_CAMERA = 5
+        const val REQUEST_OPEN_PHOTO = 6
     }
 
     private var imei = ""
@@ -190,18 +192,28 @@ class MainActivity : AppCompatActivity() {
         if (resultCode != Activity.RESULT_OK || data == null) return
         when (requestCode) {
             MainActivity.REQUEST_OPEN_GALLERY -> {
-                val selectedImage = data.data
+                val selectedImage = data.data ?: return
                 profilePhoto.setImageURI(selectedImage)
+
+                storage.savePhoto(selectedImage)
             }
             MainActivity.REQUEST_OPEN_CAMERA -> {
                 val photo = data.extras?.get("data") ?: return
                 profilePhoto.setImageBitmap(photo as Bitmap)
+
+                val uri = data.data ?: return
+                storage.savePhoto(uri)
+            }
+            MainActivity.REQUEST_OPEN_PHOTO -> {
+                val selectedImage = data.data ?: return
+                profilePhoto.setImageURI(selectedImage)
             }
         }
     }
 
     fun getProfileInfo() : Profile {
-        return storage.getProfile() ?: Profile()
+        val profile = storage.getProfile() ?: Profile()
+        return profile
     }
 
     fun saveProfileInfo(profile: Profile) {

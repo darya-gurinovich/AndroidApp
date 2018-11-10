@@ -1,5 +1,6 @@
 package com.example.dashagurinovich.androidapp.storage
 
+import android.net.Uri
 import com.example.dashagurinovich.androidapp.model.Profile
 import org.w3c.dom.Document
 import org.w3c.dom.Element
@@ -22,16 +23,13 @@ class XMLStorage(private val file: File) : IStorage {
         factory.isValidating = false
         val builder = factory.newDocumentBuilder()
 
-        var document : Document
 
-        try {
-            document = builder.parse(file)
-            removeProfile(document)
+        val document : Document = try {
+            builder.parse(file)
         }
         catch (ex: Exception) {
-            document = builder.newDocument()
+            builder.newDocument()
         }
-
 
         var data = document.getElementsByTagName("data")
         if (data.length == 0) {
@@ -41,13 +39,19 @@ class XMLStorage(private val file: File) : IStorage {
             data = document.getElementsByTagName("data")
         }
 
-        val profileNode = document.createElement("profile")
+        var profileNodes = document.getElementsByTagName("profile")
+        if (profileNodes.length == 0){
+            val profileNode = document.createElement("profile")
+            data.item(0).appendChild(profileNode)
+
+            profileNodes = document.getElementsByTagName("profile")
+        }
+
+        val profileNode = profileNodes.item(0) as Element
         profileNode.setAttribute("surname", profile.surname)
         profileNode.setAttribute("name", profile.name)
         profileNode.setAttribute("email", profile.email)
         profileNode.setAttribute("phone", profile.phone)
-
-        data.item(0).appendChild(profileNode)
 
         val transformer = TransformerFactory.newInstance().newTransformer()
         transformer.setOutputProperty(OutputKeys.INDENT, "yes")
@@ -81,6 +85,7 @@ class XMLStorage(private val file: File) : IStorage {
                     profile?.name = dataSection.getAttribute("name")
                     profile?.email = dataSection.getAttribute("email")
                     profile?.phone = dataSection.getAttribute("phone")
+                    profile?.imageUri = Uri.parse(dataSection.getAttribute("photo"))
                 }
             }
         }
@@ -88,12 +93,43 @@ class XMLStorage(private val file: File) : IStorage {
         return profile
     }
 
-    private fun removeProfile(document: Document) {
-        val nodes = document.getElementsByTagName("profile")
-        for (index in 0..nodes.length) {
-            val node = nodes.item(index)
-            node.parentNode.removeChild(node)
-        }
-    }
+    override fun savePhoto(photoUri: Uri) {
+        if (!file.exists()) file.createNewFile()
 
+        val factory = DocumentBuilderFactory.newInstance()
+        factory.isNamespaceAware = false
+        factory.isValidating = false
+        val builder = factory.newDocumentBuilder()
+
+        val document : Document = try {
+            builder.parse(file)
+        }
+        catch (ex: Exception) {
+            builder.newDocument()
+        }
+
+        var data = document.getElementsByTagName("data")
+        if (data.length == 0) {
+            val dataNode = document.createElement("data")
+            document.appendChild(dataNode)
+
+            data = document.getElementsByTagName("data")
+        }
+
+        var profile = document.getElementsByTagName("profile")
+        if (profile.length == 0){
+            val profileNode = document.createElement("profile")
+            data.item(0).appendChild(profileNode)
+
+            profile = document.getElementsByTagName("profile")
+        }
+
+        (profile.item(0) as Element).setAttribute("photo", photoUri.toString())
+
+        val transformer = TransformerFactory.newInstance().newTransformer()
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes")
+        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "3")
+
+        transformer.transform(DOMSource(document), StreamResult(file))
+    }
 }

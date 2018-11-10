@@ -8,24 +8,23 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
-import androidx.navigation.Navigation
 import com.example.dashagurinovich.androidapp.MainActivity
 import com.example.dashagurinovich.androidapp.R
 import kotlinx.android.synthetic.main.fragment_profile.*
 
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- *
- */
 class ProfileFragment : Fragment() {
+
+    private var isChangeMode : Boolean = false
+    private lateinit var editViews : List<EditText>
+    private lateinit var textViews : List<TextView>
+    private lateinit var rotateForwardAnim : Animation
+    private lateinit var rotateBackwardAnim : Animation
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -36,9 +35,16 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        editViews = listOf<EditText>(surnameEditView, nameEditView, phoneEditView,
+                emailEditView)
+        textViews = listOf<TextView>(surnameTextView, nameTextView, phoneTextView,
+                emailTextView)
+
         if (activity !is MainActivity) return
         val mainActivity = activity as MainActivity
 
+        rotateForwardAnim = AnimationUtils.loadAnimation(mainActivity, R.anim.rotate_forward)
+        rotateBackwardAnim = AnimationUtils.loadAnimation(mainActivity, R.anim.rotate_backward)
         updateProfileInfo(mainActivity)
 
         profilePhoto.setOnClickListener {
@@ -54,17 +60,38 @@ class ProfileFragment : Fragment() {
             builder.show()
         }
 
-        changeProfileButton.setOnClickListener{
-            val changeProfileAction = ProfileFragmentDirections.ActionChangeProfile()
-
-            changeProfileAction.setSurname(surnameTextView.text as String)
-            changeProfileAction.setName(nameTextView.text as String)
-            changeProfileAction.setEmail(emailTextView.text as String)
-            changeProfileAction.setPhone(phoneTextView.text as String)
-
-            Navigation.findNavController(it).navigate(changeProfileAction)
+        changeProfileButton.setOnClickListener {
+            isChangeMode = if (!isChangeMode) {
+                changeProfileButton.startAnimation(rotateForwardAnim)
+                changeProfile()
+                true
+            } else {
+                changeProfileButton.startAnimation(rotateBackwardAnim)
+                saveProfile()
+                false
+            }
         }
 
+    }
+
+    private fun changeProfile() {
+        for (editView in editViews)
+            editView.visibility = View.VISIBLE
+
+        for (textView in textViews)
+            textView.visibility = View.GONE
+
+        changeProfileButton.setImageResource(R.drawable.ic_done)
+    }
+
+    private fun saveProfile() {
+        for (editView in editViews)
+            editView.visibility = View.GONE
+
+        for (textView in textViews)
+            textView.visibility = View.VISIBLE
+
+        changeProfileButton.setImageResource(R.drawable.ic_edit)
     }
 
     private fun updateProfileInfo(mainActivity: MainActivity) {
@@ -75,6 +102,8 @@ class ProfileFragment : Fragment() {
         nameTextView?.text = profile.name
         phoneTextView?.text = profile.phone
         emailTextView?.text = profile.email
+
+        //profilePhoto.setImageURI(profile.imageUri)
     }
 
     private fun uploadFromGallery(mainActivity: MainActivity) {
