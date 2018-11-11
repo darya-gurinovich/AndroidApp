@@ -47,8 +47,6 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        updateProfileInfo()
-
         editViews = listOf<EditText>(surnameEditView, nameEditView, phoneEditView,
                 emailEditView)
         textViews = listOf<TextView>(surnameTextView, nameTextView, phoneTextView,
@@ -97,22 +95,7 @@ class ProfileFragment : Fragment() {
 
         val profile = Profile(surnameEditView.text.toString(), nameEditView.text.toString(),
                 emailEditView.text.toString(), phoneEditView.text.toString())
-        profileManager?.let {
-            it.saveProfileInfo(profile)
-            updateProfileInfo()
-        }
-    }
-
-    private fun updateProfileInfo() {
-
-        val profile = profileManager?.getProfileInfo() ?: Profile()
-
-        surnameTextView?.text = profile.surname
-        nameTextView?.text = profile.name
-        phoneTextView?.text = profile.phone
-        emailTextView?.text = profile.email
-
-        //profilePhoto.setImageURI(profile.imageUri)
+        profileManager?.saveProfileInfo(profile)
     }
 
 }

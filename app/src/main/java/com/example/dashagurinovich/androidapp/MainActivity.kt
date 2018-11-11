@@ -39,7 +39,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.nav_header.*
 import java.io.File
-import java.io.IOException
 
 
 class MainActivity : AppCompatActivity(), IAnimationHandler, IImeiManager, IProfileManager {
@@ -50,7 +49,6 @@ class MainActivity : AppCompatActivity(), IAnimationHandler, IImeiManager, IProf
         const val REQUEST_OPEN_GALLERY = 3
         const val REQUEST_PERMISSION_CAMERA = 4
         const val REQUEST_OPEN_CAMERA = 5
-        const val REQUEST_OPEN_PHOTO = 6
     }
 
     private var imei = ""
@@ -110,35 +108,36 @@ class MainActivity : AppCompatActivity(), IAnimationHandler, IImeiManager, IProf
 
         val profileObserver = Observer<Profile> { newProfile ->
 
-            profileFragment.nameTextView.text = newProfile.name
-            profileFragment.nameEditView.text = Editable.Factory.getInstance()
-                    .newEditable(newProfile.name)
+            if (newProfile != null) {
+                profileFragment.nameTextView.text = newProfile.name
+                profileFragment.nameEditView.text = Editable.Factory.getInstance()
+                        .newEditable(newProfile.name)
 
-            profileFragment.surnameTextView.text = newProfile.surname
-            profileFragment.surnameEditView.text = Editable.Factory.getInstance()
-                    .newEditable(newProfile.surname)
+                profileFragment.surnameTextView.text = newProfile.surname
+                profileFragment.surnameEditView.text = Editable.Factory.getInstance()
+                        .newEditable(newProfile.surname)
 
-            profileFragment.phoneTextView.text = newProfile.phone
-            profileFragment.phoneEditView.text = Editable.Factory.getInstance()
-                    .newEditable(newProfile.phone)
+                profileFragment.phoneTextView.text = newProfile.phone
+                profileFragment.phoneEditView.text = Editable.Factory.getInstance()
+                        .newEditable(newProfile.phone)
 
-            profileFragment.emailTextView.text = newProfile.email
-            profileFragment.emailEditView.text = Editable.Factory.getInstance()
-                    .newEditable(newProfile.email)
+                profileFragment.emailTextView.text = newProfile.email
+                profileFragment.emailEditView.text = Editable.Factory.getInstance()
+                        .newEditable(newProfile.email)
 
-            //profileFragment.profilePhoto.setImageURI(newProfile.imageUri)
+                profileFragment.profilePhoto.setImageBitmap(getBitmap(newProfile.imagePath))
+            }
         }
 
         profileViewModel.profile.observe(this, profileObserver)
     }
 
-    @Throws(IOException::class)
-    private fun getBitmapFromUri(uri: Uri): Bitmap {
-        val parcelFileDescriptor = contentResolver.openFileDescriptor(uri, "r")
-        val fileDescriptor = parcelFileDescriptor?.fileDescriptor
-        val image: Bitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor)
-        parcelFileDescriptor?.close()
-        return image
+    private fun getBitmap(filePath: String): Bitmap {
+        val file = File(filePath)
+
+        if (!file.exists()) return BitmapFactory.decodeResource(resources, R.drawable.user_profile)
+
+        return BitmapFactory.decodeFile(filePath)
     }
 
     override fun getImei() : String? {
@@ -271,25 +270,6 @@ class MainActivity : AppCompatActivity(), IAnimationHandler, IImeiManager, IProf
             startActivityForResult(gallery, MainActivity.REQUEST_OPEN_GALLERY)
         }
     }
-    private fun getImageFromGallery(uri: Uri) : Bitmap? {
-        val permission = ActivityCompat.checkSelfPermission(this,
-                Intent.ACTION_OPEN_DOCUMENT)
-
-        //If the permission was denied show the dialog window to ask the permission
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    arrayOf(Intent.ACTION_OPEN_DOCUMENT),
-                    MainActivity.REQUEST_OPEN_PHOTO)
-            return null
-        }
-        else {
-            val parcelFileDescriptor = contentResolver.openFileDescriptor(uri, "r")
-            val fileDescriptor = parcelFileDescriptor?.fileDescriptor
-            val image: Bitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor)
-            parcelFileDescriptor?.close()
-            return image
-        }
-    }
 
     private fun getImageFromCamera() {
         val permission = ActivityCompat.checkSelfPermission(this,
@@ -316,18 +296,38 @@ class MainActivity : AppCompatActivity(), IAnimationHandler, IImeiManager, IProf
             MainActivity.REQUEST_OPEN_GALLERY -> {
                 val selectedImage = data.data ?: return
 
-                storage.savePhoto(selectedImage)
+                val picturePath = getPhotoPath(selectedImage)
+
+                profileViewModel.updateProfilePhoto(picturePath)
+                storage.savePhoto(picturePath)
             }
             MainActivity.REQUEST_OPEN_CAMERA -> {
 
                 val uri = data.data ?: return
-                storage.savePhoto(uri)
+
+                val picturePath = getPhotoPath(uri)
+
+                profileViewModel.updateProfilePhoto(picturePath)
+                storage.savePhoto(picturePath)
             }
         }
     }
 
-    override fun getProfileInfo() : Profile {
+    private fun getPhotoPath(uri: Uri) : String {
+        val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
 
+        val cursor = contentResolver.query(uri,
+                filePathColumn, null, null, null)
+        cursor!!.moveToFirst()
+
+        val columnIndex = cursor.getColumnIndex(filePathColumn[0])
+        val picturePath = cursor.getString(columnIndex)
+        cursor.close()
+
+        return picturePath
+    }
+
+    override fun getProfileInfo() : Profile {
         return storage.getProfile() ?: Profile()
     }
 

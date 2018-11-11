@@ -85,7 +85,7 @@ class XMLStorage(private val file: File) : IStorage {
                     profile?.name = dataSection.getAttribute("name")
                     profile?.email = dataSection.getAttribute("email")
                     profile?.phone = dataSection.getAttribute("phone")
-                    profile?.imageUri = Uri.parse(dataSection.getAttribute("photo"))
+                    profile?.imagePath = dataSection.getAttribute("photo")
                 }
             }
         }
@@ -93,7 +93,7 @@ class XMLStorage(private val file: File) : IStorage {
         return profile
     }
 
-    override fun savePhoto(photoUri: Uri) {
+    override fun savePhoto(photoPath: String) {
         if (!file.exists()) file.createNewFile()
 
         val factory = DocumentBuilderFactory.newInstance()
@@ -124,7 +124,7 @@ class XMLStorage(private val file: File) : IStorage {
             profile = document.getElementsByTagName("profile")
         }
 
-        (profile.item(0) as Element).setAttribute("photo", photoUri.toString())
+        (profile.item(0) as Element).setAttribute("photo", photoPath)
 
         val transformer = TransformerFactory.newInstance().newTransformer()
         transformer.setOutputProperty(OutputKeys.INDENT, "yes")
