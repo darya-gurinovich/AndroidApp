@@ -30,7 +30,6 @@ class ProfileFragment : Fragment() {
 
         if (context is IProfileManager) {
             profileManager = context
-            context.setObserver(this)
         }
 
         if (context is IAnimationHandler)
@@ -44,13 +43,31 @@ class ProfileFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_profile, container, false)
     }
 
+    override fun onPause() {
+        super.onPause()
+
+        if (isChangeMode) {
+            val profile = Profile(surnameEditView.text.toString(), nameEditView.text.toString(),
+                    emailEditView.text.toString(), phoneEditView.text.toString())
+            profileManager?.saveProfileInfo(profile)
+        }
+
+        profileManager?.setChangeMode(isChangeMode)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        profileManager?.setObserver(this)
+
+        isChangeMode = profileManager?.getChangeMode() ?: false
 
         editViews = listOf<EditText>(surnameEditView, nameEditView, phoneEditView,
                 emailEditView)
         textViews = listOf<TextView>(surnameTextView, nameTextView, phoneTextView,
                 emailTextView)
+
+        if (isChangeMode) changeProfile()
 
         profilePhoto.setOnClickListener { _ ->
             if (isChangeMode) {

@@ -13,4 +13,8 @@ interface IProfileManager {
 
     fun setObserver(profileFragment: ProfileFragment)
 
+    fun getChangeMode() : Boolean
+
+    fun setChangeMode(isChangeMode : Boolean)
+
 }

@@ -6,10 +6,12 @@ import com.example.dashagurinovich.androidapp.storage.IStorage
 
 class ProfileViewModel(storage : IStorage) : ViewModel() {
     private var imagePath : String? = null
+    var isChangeMode = false
     var profile: MutableLiveData<Profile> = MutableLiveData()
 
     init {
         profile.value = storage.getProfile()
+        imagePath = profile.value?.imagePath
     }
 
     fun getProfile() = profile.value ?: Profile()

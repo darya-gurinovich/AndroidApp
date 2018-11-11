@@ -10,6 +10,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.telephony.TelephonyManager
 import android.text.Editable
@@ -20,6 +21,7 @@ import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
@@ -39,6 +41,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.nav_header.*
 import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class MainActivity : AppCompatActivity(), IAnimationHandler, IImeiManager, IProfileManager {
@@ -53,7 +58,9 @@ class MainActivity : AppCompatActivity(), IAnimationHandler, IImeiManager, IProf
 
     private var imei = ""
     private lateinit var storage : IStorage
-    lateinit var profileViewModel: ProfileViewModel
+    private lateinit var profileViewModel: ProfileViewModel
+
+    private var takenPhotoPath : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -93,6 +100,7 @@ class MainActivity : AppCompatActivity(), IAnimationHandler, IImeiManager, IProf
         val profile = profileViewModel.getProfile()
         profileNavName.text = String.format(getString(R.string.person_full_name),
                 profile.name, profile.surname)
+        profileNavPhoto.setImageBitmap(getBitmap(profile.imagePath))
 
         val navController = Navigation.findNavController(this, R.id.main_activity_fragment)
         val navigated = NavigationUI.onNavDestinationSelected(item!!, navController)
@@ -105,6 +113,8 @@ class MainActivity : AppCompatActivity(), IAnimationHandler, IImeiManager, IProf
     }
 
     override fun setObserver(profileFragment: ProfileFragment) {
+
+        if (!::profileViewModel.isInitialized) profileViewModel = ProfileViewModel(storage)
 
         val profileObserver = Observer<Profile> { newProfile ->
 
@@ -283,8 +293,30 @@ class MainActivity : AppCompatActivity(), IAnimationHandler, IImeiManager, IProf
             return
         }
         else {
-            val camera = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            startActivityForResult(camera, MainActivity.REQUEST_OPEN_CAMERA)
+            Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+
+                // Ensure that there's a camera activity to handle the intent
+                takePictureIntent.resolveActivity(packageManager)?.also { _ ->
+                    // Create the File where the photo should go
+                    val photoFile: File? = try {
+                        getPhotoFile()
+                    } catch (ex: IOException) {
+                        null
+                    }
+
+                    // Continue only if the File was successfully created
+                    photoFile?.also {
+                        val photoURI: Uri = FileProvider.getUriForFile(
+                                this,
+                                "com.example.android.fileprovider",
+                                it
+                        )
+
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                        startActivityForResult(takePictureIntent, REQUEST_OPEN_CAMERA)
+                    }
+                }
+            }
         }
     }
 
@@ -302,14 +334,26 @@ class MainActivity : AppCompatActivity(), IAnimationHandler, IImeiManager, IProf
                 storage.savePhoto(picturePath)
             }
             MainActivity.REQUEST_OPEN_CAMERA -> {
-
-                val uri = data.data ?: return
-
-                val picturePath = getPhotoPath(uri)
-
-                profileViewModel.updateProfilePhoto(picturePath)
-                storage.savePhoto(picturePath)
+                takenPhotoPath?.let {
+                    profileViewModel.updateProfilePhoto(takenPhotoPath!!)
+                    storage.savePhoto(takenPhotoPath!!)
+                }
             }
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun getPhotoFile(): File {
+        // Create an image file name
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(Date())
+        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(
+                "JPEG_${timeStamp}_", /* prefix */
+                ".jpg", /* suffix */
+                storageDir /* directory */
+        ).apply {
+            // Save a file: path for use with ACTION_VIEW intents
+            takenPhotoPath = absolutePath
         }
     }
 
@@ -344,5 +388,13 @@ class MainActivity : AppCompatActivity(), IAnimationHandler, IImeiManager, IProf
     override fun animateRotateBackward(view : View) {
         val rotateBackwardAnim = AnimationUtils.loadAnimation(this, R.anim.rotate_backward)
         view.startAnimation(rotateBackwardAnim)
+    }
+
+    override fun getChangeMode(): Boolean {
+        return profileViewModel.isChangeMode
+    }
+
+    override fun setChangeMode(isChangeMode : Boolean) {
+        profileViewModel.isChangeMode = isChangeMode
     }
 }
