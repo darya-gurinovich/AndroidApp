@@ -32,4 +32,6 @@
 
     <string name="change_profile">Change profile</string>
     <string name="save_profile">Save profile</string>
+
+    <string name="intent_page_filter">Page filter</string>
 </resources>
