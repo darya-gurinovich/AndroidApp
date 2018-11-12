@@ -32,7 +32,7 @@
                 android:layout_alignEnd="@id/profilePhoto"
                 android:layout_alignBottom="@id/profilePhoto"
                 android:visibility="invisible"
-                android:src="@drawable/ic_edit_photo" />
+                android:src="@drawable/ic_circle_edit" />
 
         </RelativeLayout>
 

@@ -1,12 +1,10 @@
 package com.example.dashagurinovich.androidapp.storage
 
-import android.net.Uri
 import com.example.dashagurinovich.androidapp.model.Profile
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.Node
 import java.io.File
-import java.lang.Exception
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.transform.OutputKeys
 import javax.xml.transform.TransformerFactory

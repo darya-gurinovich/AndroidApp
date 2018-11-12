@@ -2,6 +2,7 @@ package com.example.dashagurinovich.androidapp.fragments
 
 
 import android.content.Context
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,10 @@ import com.example.dashagurinovich.androidapp.interfaces.IAnimationHandler
 import com.example.dashagurinovich.androidapp.interfaces.IProfileManager
 import com.example.dashagurinovich.androidapp.model.Profile
 import kotlinx.android.synthetic.main.fragment_profile.*
+import android.opengl.ETC1.getHeight
+import android.view.ViewTreeObserver
+import android.view.inputmethod.InputMethodManager
+
 
 class ProfileFragment : Fragment() {
 
@@ -75,18 +80,38 @@ class ProfileFragment : Fragment() {
             }
         }
 
-        changeProfileButton.setOnClickListener {_ ->
+        addKeyboardListener()
+
+        changeProfileButton.setOnClickListener {
             isChangeMode = if (!isChangeMode) {
-                animationHandler?.animateRotateForward(changeProfileButton)
+                animationHandler?.animateRotateForward(it)
                 changeProfile()
                 true
             } else {
-                animationHandler?.animateRotateBackward(changeProfileButton)
+                animationHandler?.animateRotateBackward(it)
                 saveProfile()
                 false
             }
         }
 
+    }
+
+    private fun addKeyboardListener() {
+        profileView.viewTreeObserver.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                val r = Rect()
+                profileView.getWindowVisibleDisplayFrame(r)
+                val screenHeight = profileView.rootView.height
+
+                val keypadHeight = screenHeight - r.bottom
+
+                if (keypadHeight > screenHeight * 0.15) { // 0.15 ratio is perhaps enough to determine keypad height.
+                    changeProfileButton.hide()
+                } else {
+                    changeProfileButton.show()
+                }
+            }
+        })
     }
 
     private fun changeProfile() {

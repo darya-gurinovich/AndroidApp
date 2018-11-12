@@ -1,22 +1,11 @@
 package com.example.dashagurinovich.androidapp.model
 
-import android.net.Uri
+data class Profile(var surname : String, var name : String, var email : String, var phone : String) {
 
-class Profile {
-    var surname : String = "No information"
-    var name : String = "No information"
-    var email: String ="No information"
-    var phone : String = "No information"
     var imagePath : String = "android.resource://com.example.dashagurinovich" +
             ".androidapp/drawable/user_profile.jpg"
 
-    constructor(surname : String, name : String, email : String, phone : String) {
-        this.surname = surname
-        this.name = name
-        this.email = email
-        this.phone = phone
-    }
-
-    constructor()
+    constructor() : this("", "", "",
+            "")
 
 }

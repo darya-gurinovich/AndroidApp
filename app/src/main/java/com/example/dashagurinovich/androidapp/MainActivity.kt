@@ -119,21 +119,44 @@ class MainActivity : AppCompatActivity(), IAnimationHandler, IImeiManager, IProf
         val profileObserver = Observer<Profile> { newProfile ->
 
             if (newProfile != null) {
-                profileFragment.nameTextView.text = newProfile.name
+                profileFragment.nameTextView.text =
+                        if (newProfile.name == "") getString(R.string.no_info) else newProfile.name
+
                 profileFragment.nameEditView.text = Editable.Factory.getInstance()
                         .newEditable(newProfile.name)
 
-                profileFragment.surnameTextView.text = newProfile.surname
+                profileFragment.nameEditView.hint =
+                        if (newProfile.name == "") getString(R.string.no_info) else ""
+
+                profileFragment.surnameTextView.text =
+                        if (newProfile.surname == "") getString(R.string.no_info)
+                        else newProfile.surname
+
                 profileFragment.surnameEditView.text = Editable.Factory.getInstance()
                         .newEditable(newProfile.surname)
 
-                profileFragment.phoneTextView.text = newProfile.phone
+                profileFragment.surnameEditView.hint =
+                        if (newProfile.surname == "") getString(R.string.no_info) else ""
+
+                profileFragment.phoneTextView.text =
+                        if (newProfile.phone == "") getString(R.string.no_info)
+                        else newProfile.phone
+
                 profileFragment.phoneEditView.text = Editable.Factory.getInstance()
                         .newEditable(newProfile.phone)
 
-                profileFragment.emailTextView.text = newProfile.email
+                profileFragment.phoneEditView.hint =
+                        if (newProfile.phone == "") getString(R.string.no_info) else ""
+
+                profileFragment.emailTextView.text =
+                        if (newProfile.email == "") getString(R.string.no_info)
+                        else newProfile.email
+
                 profileFragment.emailEditView.text = Editable.Factory.getInstance()
                         .newEditable(newProfile.email)
+
+                profileFragment.emailEditView.hint =
+                        if (newProfile.email == "") getString(R.string.no_info) else ""
 
                 profileFragment.profilePhoto.setImageBitmap(getBitmap(newProfile.imagePath))
             }
