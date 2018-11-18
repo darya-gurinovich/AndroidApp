@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/navigation_graph">
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/navigation_graph"
+    app:startDestination="@id/destination_profile">
 
+    <fragment
+        android:id="@+id/destination_profile"
+        android:name="com.example.dashagurinovich.androidapp.fragments.ProfileFragment"
+        android:label="Profile" >
+    <deepLink app:uri="sdapp://com.example.dashagurinovich.androidapp/page/1"/></fragment>
+    <fragment
+        android:id="@+id/destination_about"
+        android:name="com.example.dashagurinovich.androidapp.fragments.AboutFragment"
+        android:label="About" ><deepLink app:uri="sdapp://com.example.dashagurinovich.androidapp/page/4"/></fragment>
+    <fragment
+        android:id="@+id/destination_bookmarks"
+        android:name="com.example.dashagurinovich.androidapp.fragments.BookmarksFragment"
+        android:label="Bookmarks" ><deepLink app:uri="sdapp://com.example.dashagurinovich.androidapp/page/2"/></fragment>
+    <fragment
+        android:id="@+id/destination_help"
+        android:name="com.example.dashagurinovich.androidapp.fragments.HelpFragment"
+        android:label="Help" ><deepLink app:uri="sdapp://com.example.dashagurinovich.androidapp/page/3"/></fragment>
 </navigation>
