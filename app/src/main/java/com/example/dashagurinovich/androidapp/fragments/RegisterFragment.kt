@@ -35,8 +35,20 @@ class RegisterFragment : Fragment() {
             val password = passwordEditText.text.toString()
             val confirmPassword = confirmPasswordEditText.text.toString()
 
-            if (password == confirmPassword)
-                registerManager?.register(login, password)
+            if (password == confirmPassword) {
+                val isRegistered = registerManager?.register(login, password)
+                if (isRegistered != null && !isRegistered) {
+                    registerError.text = getString(R.string.existing_user)
+                    registerError.visibility = View.VISIBLE
+                }
+                else {
+                    registerError.visibility = View.INVISIBLE
+                }
+            }
+            else {
+                registerError.text = getString(R.string.wrong_password)
+                registerError.visibility = View.VISIBLE
+            }
         }
     }
 }

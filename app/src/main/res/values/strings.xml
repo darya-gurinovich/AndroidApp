@@ -43,4 +43,7 @@
     <string name="register">Register</string>
 
     <string name="sign_out">Sign out</string>
+    <string name="wrong_sign_in">Wrong login or password</string>
+    <string name="wrong_password">Wrong password</string>
+    <string name="existing_user">The user with such login already exists</string>
 </resources>

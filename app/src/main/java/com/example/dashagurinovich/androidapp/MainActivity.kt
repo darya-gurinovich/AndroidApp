@@ -23,6 +23,7 @@ import com.example.dashagurinovich.androidapp.model.Profile
 import com.example.dashagurinovich.androidapp.services.AnimationService
 import com.example.dashagurinovich.androidapp.services.ImeiService
 import com.example.dashagurinovich.androidapp.services.ProfileService
+import com.example.dashagurinovich.androidapp.storage.IStorage
 import com.example.dashagurinovich.androidapp.storage.room.AppDataBase
 import com.example.dashagurinovich.androidapp.storage.room.SQLStorage
 import kotlinx.android.synthetic.main.activity_main.*
@@ -42,13 +43,14 @@ class MainActivity : AppCompatActivity(), IAnimationHandler, IImeiManager, IProf
     private val animationService = AnimationService(this)
     private val imeiService = ImeiService(this)
     private lateinit var profileService : ProfileService
+    private lateinit var storage : IStorage
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val storage = SQLStorage(AppDataBase.getDatabase(this))
+        storage = SQLStorage(AppDataBase.getDatabase(this))
         profileService = ProfileService(this, storage)
 
         setSupportActionBar(toolbar)
@@ -91,6 +93,7 @@ class MainActivity : AppCompatActivity(), IAnimationHandler, IImeiManager, IProf
     }
 
     private fun signOut() {
+        storage.signOutUser()
         startActivity(Intent(this, AuthenticationActivity::class.java))
     }
 

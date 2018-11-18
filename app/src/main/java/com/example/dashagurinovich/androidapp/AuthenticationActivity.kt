@@ -85,17 +85,20 @@ class AuthenticationActivity : AppCompatActivity(), IImeiManager, IRegisterManag
         return imeiService.getImei()
     }
 
-    override fun signIn(login : String, password: String) {
+    override fun signIn(login : String, password: String) : Boolean {
         val isAuthenticated = storage.authenticateUser(login, password)
         if (isAuthenticated) {
             startActivity(Intent(this, MainActivity::class.java))
         }
+        return isAuthenticated
     }
 
-    override fun register(login: String, password: String) {
+    override fun register(login: String, password: String) : Boolean {
         val user = User(login, password, false)
-        storage.createUser(user)
-        navController.navigate(R.id.destination_sign_in)
+        val isUserCreated = storage.createUser(user)
+        if (isUserCreated)
+            navController.navigate(R.id.destination_sign_in)
+        return isUserCreated
     }
 
 }

@@ -39,7 +39,14 @@ class SignInFragment : Fragment() {
         signInButton.setOnClickListener {
             val login = loginEditText.text.toString()
             val password = passwordEditText.text.toString()
-            signInManager?.signIn(login, password)
+
+            val isSignedIn = signInManager?.signIn(login, password)
+            if (isSignedIn != null && !isSignedIn){
+                signInError.visibility = View.VISIBLE
+            }
+            else {
+                signInError.visibility = View.INVISIBLE
+            }
         }
     }
 }

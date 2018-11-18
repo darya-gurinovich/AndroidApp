@@ -12,6 +12,9 @@ interface ProfileDao {
     @Insert(onConflict = REPLACE)
     fun saveProfile(profile: Profile)
 
-    @Query("SELECT * FROM users u, profiles p WHERE u.id = p.userId AND u.isCurrentUser ")
+    @Query("SELECT * FROM users u, profiles p WHERE u.id = p.userId AND u.isCurrentUser")
     fun getProfile() : Profile?
+
+    @Query("SELECT * FROM profiles p")
+    fun getProfiles() : List<Profile>
 }
