@@ -3,6 +3,7 @@ package com.example.dashagurinovich.androidapp.storage.room
 import com.example.dashagurinovich.androidapp.model.Profile
 import com.example.dashagurinovich.androidapp.storage.IStorage
 import com.example.dashagurinovich.androidapp.storage.room.entities.User
+import org.mindrot.jbcrypt.BCrypt
 
 class SQLStorage(private val appDataBase: AppDataBase) : IStorage {
     override fun signOutUser() {
@@ -15,6 +16,7 @@ class SQLStorage(private val appDataBase: AppDataBase) : IStorage {
     override fun createUser(user: User) : Boolean {
         if (appDataBase.userDao().getAuthenticatedUserByLogin(user.login) != null) return false
 
+        user.password = BCrypt.hashpw(user.password, BCrypt.gensalt())
         appDataBase.userDao().saveUser(user)
 
         val newUser = appDataBase.userDao().getAuthenticatedUserByLogin(user.login) ?: return false
@@ -27,7 +29,10 @@ class SQLStorage(private val appDataBase: AppDataBase) : IStorage {
     }
 
     override fun authenticateUser(login: String, password: String) : Boolean {
-        val user = appDataBase.userDao().getAuthenticatedUser(login, password) ?: return false
+        val user = appDataBase.userDao().getAuthenticatedUserByLogin(login) ?: return false
+
+        if (BCrypt.hashpw(password, user.password) != user.password) return false
+
         user.isCurrentUser = true
         appDataBase.userDao().saveUser(user)
 

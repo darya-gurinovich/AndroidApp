@@ -9,7 +9,7 @@ import com.example.dashagurinovich.androidapp.storage.room.dao.UserDao
 import com.example.dashagurinovich.androidapp.storage.room.entities.Profile
 import com.example.dashagurinovich.androidapp.storage.room.entities.User
 
-@Database(entities = [User::class, Profile::class], version = 3)
+@Database(entities = [User::class, Profile::class], version = 4)
 abstract class AppDataBase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
