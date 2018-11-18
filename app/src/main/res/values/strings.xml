@@ -1,11 +1,37 @@
 <resources>
     <string name="app_name">AndroidApp</string>
     <string name="app_version">The current app version: </string>
-    <string name="no_information">No information</string>
     <string name="read_phone_state_permission_explanation">The permission is needed to get your
         phone imei.</string>
     <string name="permission_explanation_dialog_question">Are you sure you don\'t want to
         give the permission?</string>
     <string name="permission_explanation_dialog_title">The permission explanation</string>
     <string name="phone_imei">The phone IMEI: </string>
+    <string name="no_info">No information</string>
+
+    <string name="profile">Profile</string>
+    <string name="about">About</string>
+    <string name="bookmark">Bookmarks</string>
+    <string name="help">Help</string>
+
+    <string name="surname_title">Surname:</string>
+    <string name="name_title">Name:</string>
+    <string name="phone_title">Phone:</string>
+    <string name="email_title">Email:</string>
+
+    <string name="person_full_name">%1$s %2$s</string>
+
+    <string name="take_photo">Take photo</string>
+    <string name="upload_from_gallery">Upload from Gallery</string>
+    <string name="read_external_storage_permission_explanation">The permission is needed to
+        upload photo from the gallery.</string>
+    <string name="camera_permission_explanation">The permission is needed to
+        take a photo to upload.</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="change_profile">Change profile</string>
+    <string name="save_profile">Save profile</string>
+
+    <string name="intent_page_filter">Page filter</string>
 </resources>
