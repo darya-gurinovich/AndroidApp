@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -15,9 +16,6 @@ import com.example.dashagurinovich.androidapp.interfaces.IAnimationHandler
 import com.example.dashagurinovich.androidapp.interfaces.IProfileManager
 import com.example.dashagurinovich.androidapp.model.Profile
 import kotlinx.android.synthetic.main.fragment_profile.*
-import android.opengl.ETC1.getHeight
-import android.view.ViewTreeObserver
-import android.view.inputmethod.InputMethodManager
 
 
 class ProfileFragment : Fragment() {
@@ -99,6 +97,7 @@ class ProfileFragment : Fragment() {
     private fun addKeyboardListener() {
         profileView.viewTreeObserver.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
+                if (profileView == null) return
                 val r = Rect()
                 profileView.getWindowVisibleDisplayFrame(r)
                 val screenHeight = profileView.rootView.height

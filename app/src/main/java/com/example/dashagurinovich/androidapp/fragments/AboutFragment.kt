@@ -2,6 +2,7 @@ package com.example.dashagurinovich.androidapp.fragments
 
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -48,7 +49,9 @@ class AboutFragment : Fragment() {
 
     private fun addPhoneImeiToLayout(){
 
-        val imei = imeiManager?.getImei() ?: getString(R.string.no_info)
+        val noInfoString = getString(R.string.no_info)
+        val imei = imeiManager?.getImei() ?: noInfoString
+
         //Add the IMEI if the permission was granted
 
         phoneImeiTextView.text = imei
