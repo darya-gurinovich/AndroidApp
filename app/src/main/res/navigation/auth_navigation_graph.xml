@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/auth_navigation_graph"
+    app:startDestination="@id/destination_sign_in">
+
+    <fragment
+        android:id="@+id/destination_sign_in"
+        android:name="com.example.dashagurinovich.androidapp.fragments.SignInFragment"
+        android:label="Sign In"
+        tools:layout="@layout/fragment_sign_in" >
+        <action
+            android:id="@+id/action_destination_sign_in_to_registerFragment"
+            app:destination="@id/destination_register" />
+    </fragment>
+    <fragment
+        android:id="@+id/destination_about"
+        android:name="com.example.dashagurinovich.androidapp.fragments.AboutFragment"
+        android:label="About" />
+    <fragment
+        android:id="@+id/destination_register"
+        android:name="com.example.dashagurinovich.androidapp.fragments.RegisterFragment"
+        android:label="Register" />
+</navigation>

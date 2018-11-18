@@ -4,9 +4,6 @@
     <item
         android:id="@+id/destination_about"
         android:title="@string/about"
+        app:showAsAction="ifRoom"
         android:icon="@drawable/info"/>
-    <item
-        android:id="@+id/sign_out"
-        android:title="@string/sign_out"
-        android:icon="@drawable/ic_exit_to_app_black_24dp"/>
 </menu>

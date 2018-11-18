@@ -21,8 +21,11 @@ ext {
                 standardOutput = stdout
             }
             String result = stdout.toString().trim()
-            return result.substring(0, result.indexOf('-'))+"."+
-                    result.substring(result.indexOf('-') + 1, result.lastIndexOf('-'))
+            if (result.contains('-')) {
+                return result.substring(0, result.indexOf('-')) + "." +
+                        result.substring(result.indexOf('-') + 1, result.lastIndexOf('-'))
+            }
+            return result + '.0'
         }
         catch (ignored) {
             return "0.0.0"

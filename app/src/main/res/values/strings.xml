@@ -34,4 +34,13 @@
     <string name="save_profile">Save profile</string>
 
     <string name="intent_page_filter">Page filter</string>
+
+    <string name="login">Login: </string>
+    <string name="password">Password: </string>
+    <string name="confirm_password">Confirm password</string>
+
+    <string name="sign_in">Sign in</string>
+    <string name="register">Register</string>
+
+    <string name="sign_out">Sign out</string>
 </resources>

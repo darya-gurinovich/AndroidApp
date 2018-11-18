@@ -18,6 +18,8 @@
         <activity android:name=".MainActivity" android:screenOrientation="portrait">
             <nav-graph android:value="@navigation/navigation_graph"/>
 
+        </activity>
+        <activity android:name=".AuthenticationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

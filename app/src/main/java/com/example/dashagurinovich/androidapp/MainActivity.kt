@@ -10,9 +10,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
@@ -29,7 +27,6 @@ import com.example.dashagurinovich.androidapp.storage.XMLStorage
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header.*
 import java.io.File
-
 
 class MainActivity : AppCompatActivity(), IAnimationHandler, IImeiManager, IProfileManager {
 
@@ -82,9 +79,18 @@ class MainActivity : AppCompatActivity(), IAnimationHandler, IImeiManager, IProf
                 profile.name, profile.surname)
         profileNavPhoto.setImageBitmap(getBitmap(profile.imagePath))
 
+        if (item?.itemId == R.id.sign_out) {
+            signOut()
+            return true
+        }
+
         val navController = Navigation.findNavController(this, R.id.main_activity_fragment)
         val navigated = NavigationUI.onNavDestinationSelected(item!!, navController)
         return navigated || super.onOptionsItemSelected(item)
+    }
+
+    private fun signOut() {
+        startActivity(Intent(this, AuthenticationActivity::class.java))
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -147,29 +153,6 @@ class MainActivity : AppCompatActivity(), IAnimationHandler, IImeiManager, IProf
                             MainActivity.REQUEST_PERMISSION_CAMERA)
                 }
             }
-        }
-    }
-
-    private fun showPermissionExplanation (permission : String, explanation : String,
-                                           permissionRequestCode: Int) {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                        permission)) {
-            val builder = AlertDialog.Builder(this)
-            val dialogQuestion = getString(R.string.permission_explanation_dialog_question)
-            builder.setMessage("$explanation $dialogQuestion")
-                    .setTitle(R.string.permission_explanation_dialog_title)
-
-            builder.setPositiveButton("Yes"){ _, _ ->
-                // Do nothing if the user doesn't want to give the permission
-            }
-                    // Show the permission dialog again
-                    .setNegativeButton("No") { _, _ ->
-                        ActivityCompat.requestPermissions(this,
-                                arrayOf(permission), permissionRequestCode)
-
-                    }
-
-            builder.show()
         }
     }
 
