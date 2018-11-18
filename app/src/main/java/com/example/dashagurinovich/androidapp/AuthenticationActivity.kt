@@ -14,11 +14,17 @@ import com.example.dashagurinovich.androidapp.interfaces.IImeiManager
 import com.example.dashagurinovich.androidapp.interfaces.IRegisterManager
 import com.example.dashagurinovich.androidapp.interfaces.ISignInManager
 import com.example.dashagurinovich.androidapp.services.ImeiService
+import com.example.dashagurinovich.androidapp.storage.IStorage
+import com.example.dashagurinovich.androidapp.storage.room.AppDataBase
+import com.example.dashagurinovich.androidapp.storage.room.SQLStorage
+import com.example.dashagurinovich.androidapp.storage.room.entities.User
 import kotlinx.android.synthetic.main.activity_auth.*
 
 class AuthenticationActivity : AppCompatActivity(), IImeiManager, IRegisterManager, ISignInManager {
 
     private val imeiService = ImeiService(this)
+    private lateinit var storage : IStorage
+    private lateinit var navController : NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -27,11 +33,14 @@ class AuthenticationActivity : AppCompatActivity(), IImeiManager, IRegisterManag
 
         setSupportActionBar(auth_toolbar)
 
-        val navController = Navigation.findNavController(this, R.id.auth_activity_fragment)
-        setupActionBar(navController)
+        navController = Navigation.findNavController(this, R.id.auth_activity_fragment)
+        setupActionBar()
+
+        val db = AppDataBase.getDatabase(this)
+        storage = SQLStorage(db)
     }
 
-    private fun setupActionBar(navController: NavController) {
+    private fun setupActionBar() {
         NavigationUI.setupActionBarWithNavController(this, navController)
     }
 
@@ -76,12 +85,17 @@ class AuthenticationActivity : AppCompatActivity(), IImeiManager, IRegisterManag
         return imeiService.getImei()
     }
 
-    override fun signIn() {
-        startActivity(Intent(this, MainActivity::class.java))
+    override fun signIn(login : String, password: String) {
+        val isAuthenticated = storage.authenticateUser(login, password)
+        if (isAuthenticated) {
+            startActivity(Intent(this, MainActivity::class.java))
+        }
     }
 
     override fun register(login: String, password: String) {
-
+        val user = User(login, password, false)
+        storage.createUser(user)
+        navController.navigate(R.id.destination_sign_in)
     }
 
 }

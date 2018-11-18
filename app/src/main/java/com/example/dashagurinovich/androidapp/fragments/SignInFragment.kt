@@ -37,7 +37,9 @@ class SignInFragment : Fragment() {
         }
 
         signInButton.setOnClickListener {
-            signInManager?.signIn()
+            val login = loginEditText.text.toString()
+            val password = passwordEditText.text.toString()
+            signInManager?.signIn(login, password)
         }
     }
 }

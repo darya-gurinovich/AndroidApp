@@ -23,7 +23,8 @@ import com.example.dashagurinovich.androidapp.model.Profile
 import com.example.dashagurinovich.androidapp.services.AnimationService
 import com.example.dashagurinovich.androidapp.services.ImeiService
 import com.example.dashagurinovich.androidapp.services.ProfileService
-import com.example.dashagurinovich.androidapp.storage.XMLStorage
+import com.example.dashagurinovich.androidapp.storage.room.AppDataBase
+import com.example.dashagurinovich.androidapp.storage.room.SQLStorage
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header.*
 import java.io.File
@@ -47,7 +48,7 @@ class MainActivity : AppCompatActivity(), IAnimationHandler, IImeiManager, IProf
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val storage = XMLStorage(File(applicationContext.filesDir, "data.xml"))
+        val storage = SQLStorage(AppDataBase.getDatabase(this))
         profileService = ProfileService(this, storage)
 
         setSupportActionBar(toolbar)

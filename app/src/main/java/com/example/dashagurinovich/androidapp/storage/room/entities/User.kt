@@ -2,9 +2,11 @@ package com.example.dashagurinovich.androidapp.storage.room.entities
 
 import androidx.room.*
 
-@Entity
+@Entity(tableName = "users")
 data class User(
-        @PrimaryKey var uid: Int,
-        @ColumnInfo(name = "login") var firstName: String?,
-        @ColumnInfo(name = "password") var lastName: String?
-)
+        @ColumnInfo(name = "login") var login: String,
+        @ColumnInfo(name = "password") var password: String,
+        @ColumnInfo(name = "isCurrentUser") var isCurrentUser: Boolean
+) {
+    @PrimaryKey(autoGenerate = true) var id: Int = 0
+}
